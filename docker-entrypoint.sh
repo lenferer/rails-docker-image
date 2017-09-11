@@ -2,7 +2,12 @@
 
 set -e
 
-usermod -u ${USER_ID:-1000} ${CONTAINER_USER} > /dev/null 2>&1
-chown -R ${USER_ID:-1000} /home/${CONTAINER_USER}
+if [[ -n "${USER_ID}" ]]; then
+  usermod -u ${USER_ID} ${CONTAINER_USER}
+fi
+
+if [[ -n "${GROUP_ID}" ]]; then
+  groupmod -g ${GROUP_ID} ${CONTAINER_USER}
+fi
 
 exec "$@"
