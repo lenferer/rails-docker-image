@@ -55,14 +55,19 @@ RUN set -ex; \
   \
   apt-get purge -y --auto-remove wget
 
+#################################
+########## ImageMagick ##########
+#################################
+
+RUN apt-get update && \
+    apt-get install -y imagemagick libmagickcore-dev libmagickwand-dev
+ENV PATH /usr/lib/x86_64-linux-gnu/ImageMagick-6.8.9/bin-Q16/:${PATH}
+
 ##########################
 ########## REST ##########
 ##########################
 
-ENV CONTAINER_USER rails
-RUN useradd -m -s /bin/bash ${CONTAINER_USER}
 ADD docker-entrypoint.sh /usr/local/bin/
-ADD .inputrc /home/${CONTAINER_USER}
-WORKDIR /home/${CONTAINER_USER}
+ADD inputrc /etc/skel/.inputrc
 ENTRYPOINT ["docker-entrypoint.sh"]
-CMD ["gosu", "rails", "/bin/bash"]
+CMD ["irb"]
