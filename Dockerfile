@@ -67,7 +67,4 @@ ENV PATH /usr/lib/x86_64-linux-gnu/ImageMagick-6.8.9/bin-Q16/:${PATH}
 ########## REST ##########
 ##########################
 
-ADD docker-entrypoint.sh /usr/local/bin/
 ADD inputrc /etc/skel/.inputrc
-ENTRYPOINT ["docker-entrypoint.sh"]
-CMD ["irb"]
