@@ -59,10 +59,4 @@ RUN set -ex; \
 ########## REST ##########
 ##########################
 
-ENV CONTAINER_USER rails
-RUN useradd -m -s /bin/bash ${CONTAINER_USER}
-ADD docker-entrypoint.sh /usr/local/bin/
-ADD .inputrc /home/${CONTAINER_USER}
-WORKDIR /home/${CONTAINER_USER}
-ENTRYPOINT ["docker-entrypoint.sh"]
-CMD ["gosu", "rails", "/bin/bash"]
+ADD inputrc /etc/skel/.inputrc
