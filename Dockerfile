@@ -59,3 +59,4 @@ ENV PATH /usr/lib/x86_64-linux-gnu/ImageMagick-6.8.9/bin-Q16/:${PATH}
 ##########################
 
 ADD inputrc /etc/skel/.inputrc
+ADD irbrc /etc/skel/.irbrc
