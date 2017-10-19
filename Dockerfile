@@ -3,7 +3,8 @@ FROM ruby:2.3
 ############################
 ########## LOCALE ##########
 ############################
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y locales
+RUN apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y locales
 
 ENV CONTAINER_LOCALE en_US
 RUN sed -i -e "s/# ${CONTAINER_LOCALE}.UTF-8 UTF-8/${CONTAINER_LOCALE}.UTF-8 UTF-8/" /etc/locale.gen && \
@@ -29,30 +30,20 @@ RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
 ########## GOSU ##########
 ##########################
 ENV GOSU_VERSION 1.10
-RUN set -ex; \
-  \
-  fetchDeps=' \
-    ca-certificates \
-    wget \
-  '; \
-  apt-get update; \
-  apt-get install -y --no-install-recommends $fetchDeps; \
-  rm -rf /var/lib/apt/lists/*; \
-  \
-  dpkgArch="$(dpkg --print-architecture | awk -F- '{ print $NF }')"; \
-  wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch"; \
-  wget -O /usr/local/bin/gosu.asc "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch.asc"; \
-  \
-# verify the signature
-  export GNUPGHOME="$(mktemp -d)"; \
-  gpg --keyserver ha.pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4; \
-  gpg --batch --verify /usr/local/bin/gosu.asc /usr/local/bin/gosu; \
-  rm -r "$GNUPGHOME" /usr/local/bin/gosu.asc; \
-  \
-  chmod +x /usr/local/bin/gosu; \
-# verify that the binary works
-  gosu nobody true; \
-  \
+RUN set -ex && \
+  fetchDeps='ca-certificates wget' && \
+  apt-get update && \
+  apt-get install -y --no-install-recommends $fetchDeps && \
+  rm -rf /var/lib/apt/lists/* && \
+  dpkgArch="$(dpkg --print-architecture | awk -F- '{ print $NF }')" && \
+  wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch" && \
+  wget -O /usr/local/bin/gosu.asc "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch.asc" && \
+  export GNUPGHOME="$(mktemp -d)" && \
+  gpg --keyserver ha.pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4 && \
+  gpg --batch --verify /usr/local/bin/gosu.asc /usr/local/bin/gosu && \
+  rm -r "$GNUPGHOME" /usr/local/bin/gosu.asc && \
+  chmod +x /usr/local/bin/gosu && \
+  gosu nobody true && \
   apt-get purge -y --auto-remove wget
 
 #################################
