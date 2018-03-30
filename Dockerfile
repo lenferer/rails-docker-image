@@ -68,3 +68,15 @@ ENV PATH /usr/lib/x86_64-linux-gnu/ImageMagick-6.8.9/bin-Q16/:${PATH}
 ##########################
 
 ADD inputrc /etc/skel/.inputrc
+
+##########################
+####### PHANTOMJS ########
+##########################
+
+RUN apt-get update && \
+    apt-get install -y wget build-essential chrpath libssl-dev libxft-dev libfreetype6 libfreetype6-dev libfontconfig1 libfontconfig1-dev
+
+RUN wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2 && \
+    tar xvjf phantomjs-2.1.1-linux-x86_64.tar.bz2 -C /usr/local/share/ && \
+    ln -sf /usr/local/share/phantomjs-2.1.1-linux-x86_64/bin/phantomjs /usr/local/bin && \
+    rm phantomjs-2.1.1-linux-x86_64.tar.bz2
