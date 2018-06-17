@@ -1,4 +1,4 @@
-FROM ruby:2.4
+FROM ruby:2.3
 
 ############################
 ########## LOCALE ##########
@@ -51,9 +51,7 @@ RUN set -ex; \
   \
   chmod +x /usr/local/bin/gosu; \
 # verify that the binary works
-  gosu nobody true; \
-  \
-  apt-get purge -y --auto-remove wget
+  gosu nobody true
 
 #################################
 ########## ImageMagick ##########
