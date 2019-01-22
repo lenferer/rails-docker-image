@@ -48,6 +48,14 @@ ENV PATH /usr/lib/x86_64-linux-gnu/ImageMagick-6.8.9/bin-Q16/:${PATH}
 RUN rm -rf /var/lib/apt/lists/*
 
 ##########################
+####### CHROME ########
+##########################
+RUN apt-get update -qqy && apt-get -qqy install xvfb xdg-utils fonts-liberation libappindicator3-1 libasound2 libnspr4 libnss3 libxss1
+
+RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+RUN dpkg -i google-chrome-stable_current_amd64.deb; apt-get -fy install
+
+##########################
 ########## REST ##########
 ##########################
 
