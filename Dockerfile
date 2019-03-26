@@ -1,4 +1,4 @@
-FROM ruby:2.6
+FROM ruby:2.6.1
 
 ############################
 ########## LOCALE ##########
@@ -49,6 +49,12 @@ RUN apt-get update -qqy && apt-get -qqy install xvfb xdg-utils fonts-liberation 
 
 RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 RUN dpkg -i google-chrome-stable_current_amd64.deb; apt-get -fy install
+
+##########################
+####### FIREFOX ########
+##########################
+RUN wget http://ftp.ru.debian.org/debian/pool/main/f/firefox/firefox_66.0.1-1_i386.deb
+RUN dpkg -i firefox_66.0.1-1_i386.deb; apt-get -fy install
 
 #################################
 ######## Clean apt cache ########
