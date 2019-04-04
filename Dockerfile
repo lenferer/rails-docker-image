@@ -1,46 +1,4 @@
-FROM ruby:2.6.1
-
-############################
-########## LOCALE ##########
-############################
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y locales
-
-ENV CONTAINER_LOCALE en_US
-RUN sed -i -e "s/# ${CONTAINER_LOCALE}.UTF-8 UTF-8/${CONTAINER_LOCALE}.UTF-8 UTF-8/" /etc/locale.gen && \
-    dpkg-reconfigure --frontend=noninteractive locales && \
-    update-locale LANG=${CONTAINER_LOCALE}.UTF-8
-
-ENV LANG ${CONTAINER_LOCALE}.UTF-8
-
-############################
-########## NODEJS ##########
-############################
-RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - && \
-    apt-get install -y nodejs
-
-##########################
-########## YARN ##########
-##########################
-RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
-    echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
-    apt-get update && apt-get install -y yarn
-
-##########################
-########## GOSU ##########
-##########################
-RUN set -eux; \
-	apt-get update; \
-	apt-get install -y gosu; \
-# verify that the binary works
-	gosu nobody true
-
-#################################
-########## ImageMagick ##########
-#################################
-
-RUN apt-get update && \
-    apt-get install -y imagemagick libmagickcore-dev libmagickwand-dev libssl1.0-dev
-ENV PATH /usr/lib/x86_64-linux-gnu/ImageMagick-6.8.9/bin-Q16/:${PATH}
+FROM evserykh/rails:ruby2.6.2
 
 ##########################
 ####### CHROME ########
@@ -50,19 +8,8 @@ RUN apt-get update -qqy && apt-get -qqy install xvfb xdg-utils fonts-liberation 
 RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 RUN dpkg -i google-chrome-stable_current_amd64.deb; apt-get -fy install
 
-##########################
-####### FIREFOX ########
-##########################
-RUN wget http://ftp.ru.debian.org/debian/pool/main/f/firefox/firefox_66.0.1-1_i386.deb
-RUN dpkg -i firefox_66.0.1-1_i386.deb; apt-get -fy install
+RUN wget http://ftp.br.debian.org/debian-security/pool/updates/main/o/openssl/libssl1.0.0_1.0.1t-1+deb7u4_amd64.deb
+RUN dpkg -i libssl1.0.0_1.0.1t-1+deb7u4_amd64.deb
 
-#################################
-######## Clean apt cache ########
-#################################
-RUN rm -rf /var/lib/apt/lists/*
-
-##########################
-########## REST ##########
-##########################
-
-ADD inputrc /etc/inputrc
+RUN wget http://ftp.br.debian.org/debian-security/pool/updates/main/o/openssl/libssl-dev_1.0.1t-1+deb7u4_amd64.deb
+RUN dpkg -i libssl-dev_1.0.1t-1+deb7u4_amd64.deb
